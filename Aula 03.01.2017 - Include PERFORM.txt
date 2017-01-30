@@ -1,0 +1,108 @@
+* -- INCLUDE PERFORM -- *
+
+*&---------------------------------------------------------------------*
+*&  Include           SAPMZYTESTE_AL06F01
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Form  BUSCA_AUTOR
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM busca_autor .
+  CLEAR: zyautor_al06-nomeautor, zyautor_al06-sexo. "Campos na tela.
+
+  SELECT SINGLE * FROM zyautor_al06
+    INTO zyautor_al06
+    WHERE codautor = zyautor_al06-codautor. "Campo na tela.
+
+  IF sy-subrc <> 0.
+    MESSAGE 'Código de Autor Inválido' TYPE 'E'.
+  ENDIF.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DEFINE_TITULO
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM define_titulo .
+  CASE sy-tcode.
+    WHEN 'ZYTESTE_AL06'.
+      SET TITLEBAR 'TITLE_0200' WITH text-001. "Exibição - Substitui o "&" no título
+    WHEN 'ZYTESTE_C_AL06'.
+      SET TITLEBAR 'TITLE_0200' WITH text-002. "Criação - Substitui o "&" no título
+    WHEN 'ZYTESTE_A_AL06'.
+      SET TITLEBAR 'TITLE_0200' WITH text-003. "Alteração - Substitui o "&" no título
+  ENDCASE.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  DEFINE_TELA
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM define_tela .
+
+  "Configuração Inicial
+  IF sy-tcode = 'ZYTESTE_C_AL06' AND zyautor_al06-codautor IS INITIAL. "Valor inicial na estrutura(campo)
+
+    SELECT MAX( codautor ) FROM zyautor_al06 INTO zyautor_al06-codautor. "Para dentro da estrutura(campo)
+
+    "zyautor_al06-codautor = zyautor_al06-codautor + 1.
+    ADD 1 TO zyautor_al06-codautor. "Também funciona
+
+  ENDIF.
+
+  "Configuração dos campos da tela
+  DATA wa_screen TYPE screen. "Tipo standard (Estrutura)
+
+  LOOP AT SCREEN INTO wa_screen. "Loop nos campos da tela
+    CASE sy-tcode.
+      WHEN 'ZYTESTE_AL06'. "Exibição
+        "Desabilitando os campos
+        CASE wa_screen-name.
+          WHEN 'ZYAUTOR_AL06-NOMEAUTOR'.
+            wa_screen-input = 0. "Bloquear o campo
+          WHEN 'ZYAUTOR_AL06-SEXO'.
+            wa_screen-input = 0.  "Bloquear o campo
+          WHEN 'SALVAR'.
+            wa_screen-active = 0. "Deixando o botão invisivel
+        ENDCASE.
+
+      WHEN 'ZYTESTE_C_AL06'. "Criação
+      WHEN 'ZYTESTE_A_AL06'. "Alteração
+    ENDCASE.
+
+
+    MODIFY screen FROM wa_screen.
+  ENDLOOP.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*&      Form  SALVA_AUTOR
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM salva_autor .
+
+  MODIFY zyautor_al06 FROM zyautor_al06.
+
+  IF sy-subrc = 0.
+    MESSAGE 'Dados salvos com sucesso!' TYPE 'S'.
+  ELSE.
+    MESSAGE 'Os dados não foram salvos!' TYPE 'S' DISPLAY LIKE 'E'.
+  ENDIF.
+
+ENDFORM.
+

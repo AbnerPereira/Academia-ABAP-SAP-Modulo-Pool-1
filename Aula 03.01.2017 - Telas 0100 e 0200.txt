@@ -1,0 +1,23 @@
+* -- TELA 0100 -- *
+
+PROCESS BEFORE OUTPUT.
+  MODULE status_0100.
+
+PROCESS AFTER INPUT.
+
+*Criando um Módulo de validação no campo
+  FIELD zyautor_al06-codautor MODULE valida_cod_autor ON REQUEST.
+
+  MODULE user_command_0100.
+
+  MODULE exit_command_0100 AT EXIT-COMMAND. "Para a ação de saída
+
+
+
+* -- TELA 0200 -- *
+
+PROCESS BEFORE OUTPUT.
+MODULE STATUS_0200.
+
+PROCESS AFTER INPUT.
+MODULE USER_COMMAND_0200.

@@ -1,0 +1,9 @@
+* -- INCLUDE TOP -- *
+
+*&---------------------------------------------------------------------*
+*& Include SAPMZYTESTE_AL06TOP                               PoolMóds.        SAPMZYTESTE_AL06
+*&
+*&---------------------------------------------------------------------*
+PROGRAM SAPMZYTESTE_AL06.
+
+TABLES zyautor_al06. "Referente a uma estrutura (Struct) do meu campo em tela

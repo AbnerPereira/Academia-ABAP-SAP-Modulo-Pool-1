@@ -1,0 +1,54 @@
+* -- INCLUDE PAI -- *
+
+*&---------------------------------------------------------------------*
+*&  Include           SAPMZYTESTE_AL06I01
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm. "Pega a ação do usuário
+    WHEN 'BUSCAR'.
+      CALL SCREEN 0200. "Chamar uma tela
+  ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0200  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0200 INPUT.
+  CASE sy-ucomm.  "Pega a ação do usuário
+    WHEN 'BACK'.
+      LEAVE TO SCREEN 0. "Volta para a tela anterior
+    WHEN 'CANCEL' OR 'EXIT'.
+      LEAVE PROGRAM. "Deixa o programa
+    WHEN 'SALVAR'.
+      PERFORM salva_autor.
+  ENDCASE.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  VALIDA_COD_AUTOR  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE valida_cod_autor INPUT.
+  PERFORM busca_autor.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  EXIT_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE exit_command_0100 INPUT.
+  CASE sy-ucomm.  "Pega a ação do usuário
+    WHEN 'BACK' OR 'CANCEL' OR 'EXIT'.
+      LEAVE PROGRAM.
+  ENDCASE.
+
+ENDMODULE.
+
